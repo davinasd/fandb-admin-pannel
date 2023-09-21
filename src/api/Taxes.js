@@ -84,13 +84,19 @@ function Tax() {
               <Text fontWeight="bold">SGST (%)</Text>
             </Th>
             <Th>
-              <Text fontWeight="bold">Tax (Rs)</Text>
+              <Text fontWeight="bold">Tax (%)</Text>
             </Th>
             <Th>
               <Text fontWeight="bold">Actions</Text>
             </Th>
+            <Th>
+            <Button size="sm" colorScheme="blue" onClick={handleAlterClick}>
+              <Text fontWeight="bold">Alter Tax</Text>
+            </Button>
+            </Th>
           </Tr>
         </Thead>
+
         <Tbody>
           {tax && (
             <Tr>
@@ -103,11 +109,7 @@ function Tax() {
               <Td>
                 <Text fontWeight="bold">{tax.service_tax}</Text>
               </Td>
-              <Td>
-                <Button size="sm" colorScheme="blue" onClick={handleAlterClick}>
-                  <Text fontWeight="bold">Update Tax</Text>
-                </Button>
-              </Td>
+              <Td></Td>
             </Tr>
           )}
         </Tbody>
@@ -152,11 +154,11 @@ function Tax() {
               </Text>
             </Box>
           </ModalBody>
-          <ModalFooter gap="5px">
-            <Button colorScheme="blue" borderRadius="md" onClick={handleSaveTaxes}>
+          <ModalFooter>
+            <Button colorScheme="blue" onClick={handleSaveTaxes}>
               <Text fontWeight="bold">Save</Text>
             </Button>
-            <Button colorScheme="red" borderRadius="md" onClick={handleModalClose}>
+            <Button colorScheme="red" onClick={handleModalClose}>
               <Text fontWeight="bold">Cancel</Text>
             </Button>
           </ModalFooter>
