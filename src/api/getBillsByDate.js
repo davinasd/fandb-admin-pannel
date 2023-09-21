@@ -37,6 +37,8 @@ function BillByDate() {
     onOpen: onOpenMoreInfo,
     onClose: onCloseMoreInfo,
   } = useDisclosure();
+  const [selectedFoodBill, setSelectedFoodBill] = useState(null);
+  const [selectedDrinkBill, setSelectedDrinkBill] = useState(null);
   const [selectedBill, setSelectedBill] = useState(null);
   const today = new Date();
   const dd = String(today.getDate()).padStart(2, "0");
@@ -112,6 +114,20 @@ function BillByDate() {
 
   const handleMoreInfoClick = (bill) => {
     setSelectedBill(bill);
+    setSelectedFoodBill(null);
+    setSelectedDrinkBill(null);
+    onOpenMoreInfo();
+  };
+  const handleMoreInfoFoodClick = (bill) => {
+    setSelectedBill(null);
+    setSelectedFoodBill(bill);
+    setSelectedDrinkBill(null);
+    onOpenMoreInfo();
+  };
+  const handleMoreInfoDrinkClick = (bill) => {
+   setSelectedBill(null);
+   setSelectedFoodBill(null);
+   setSelectedDrinkBill(bill);
     onOpenMoreInfo();
   };
 
@@ -192,7 +208,7 @@ function BillByDate() {
                 <Th>Amount (₹)</Th>
                 <Th>Food Paid</Th>
                 <Th>Drink Paid</Th>
-                <Th>More Info</Th>
+                <Th>Action</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -243,11 +259,31 @@ function BillByDate() {
                   <Td>
                     <Button
                       size="sm"
-                      colorScheme="blue"
+                      colorScheme="red"
                       borderRadius="lg"
                       onClick={() => handleMoreInfoClick(bill)}
                     >
-                      More Info
+                      All Bill
+                    </Button>
+                  </Td>
+                  <Td>
+                    <Button
+                      size="sm"
+                      colorScheme="yellow"
+                      borderRadius="lg"
+                      onClick={() => handleMoreInfoFoodClick(bill)}
+                    >
+                      Food Bill
+                    </Button>
+                  </Td>
+                  <Td>
+                    <Button
+                      size="sm"
+                      colorScheme="purple"
+                      borderRadius="lg"
+                      onClick={() => handleMoreInfoDrinkClick(bill)}
+                    >
+                      Drink Bill
                     </Button>
                   </Td>
                 </Tr>
@@ -273,7 +309,6 @@ function BillByDate() {
             </Tfoot>
           </Table>
         </TableContainer>
-
         {selectedBill && (
           <Modal
             isOpen={isOpenMoreInfo}
@@ -381,6 +416,190 @@ function BillByDate() {
                   </Text>
                   <Text>
                     <strong>Time:</strong> {selectedBill.time1}
+                  </Text>
+                </Box>
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+        )}
+        {selectedFoodBill && (
+          <Modal
+            isOpen={isOpenMoreInfo}
+            onClose={() => {
+              setSelectedFoodBill(null);
+              onCloseMoreInfo();
+            }}
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Food Bill Information</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Box>
+                  <Text>
+                    <strong>Name:</strong> {selectedFoodBill.name}
+                  </Text>
+                  <Text>
+                    <strong>Table No.:</strong> {selectedFoodBill.tableNo}
+                  </Text>
+                  <Text>
+                    <strong>Phone No. :</strong> {selectedFoodBill.phoneNo}
+                  </Text>
+                  <Text>
+                    <strong>OTP:</strong> {selectedFoodBill.otp}
+                  </Text>
+                  <Text>
+                    <strong>Food Bill Paid:</strong>{" "}
+                    <Tag
+                      size="sm"
+                      colorScheme={
+                        selectedFoodBill.foodBillpaid === "notPaid"
+                          ? "red"
+                          : "green"
+                      }
+                    >
+                      {selectedFoodBill.foodBillpaid}
+                    </Tag>
+                  </Text>
+
+                  <Text>
+                    <strong>Dish Items:</strong>
+                  </Text>
+                  <ul>
+                    {selectedFoodBill.DishItems.map((dish) => (
+                      <li key={dish._id}>
+                        {dish.name} ({dish.quantity})- ₹{dish.amount}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Text>
+                    <strong>Grand Total(Food and Drink included):</strong> ₹
+                    {selectedFoodBill.grandTotal}
+                  </Text>
+                  <Text>
+                    <strong>Dish Total:</strong> ₹{selectedFoodBill.dishTotal}
+                  </Text>
+
+                  <Text>
+                    <strong>Donation Amount:</strong> ₹
+                    {selectedFoodBill.donationAmount}
+                  </Text>
+                  <Text>
+                    <strong>Cleared Bill:</strong>{" "}
+                    {selectedFoodBill.clear === "0"
+                      ? "Not Cleared"
+                      : selectedFoodBill.clear === "1"
+                      ? "Cleared"
+                      : "Unknown"}
+                  </Text>
+                  <Text>
+                    <strong>CGST:</strong> {selectedFoodBill.cgst}
+                  </Text>
+                  <Text>
+                    <strong>SGST:</strong> {selectedFoodBill.sgst}
+                  </Text>
+                  <Text>
+                    <strong>Service Tax:</strong> {selectedFoodBill.service_tax}
+                  </Text>
+                  <Text>
+                    <strong>Date:</strong> {selectedFoodBill.date1}
+                  </Text>
+                  <Text>
+                    <strong>Time:</strong> {selectedFoodBill.time1}
+                  </Text>
+                </Box>
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+        )}
+        {selectedDrinkBill && (
+          <Modal
+            isOpen={isOpenMoreInfo}
+            onClose={() => {
+              setSelectedDrinkBill(null);
+              onCloseMoreInfo();
+            }}
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Drink Bill Information</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Box>
+                  <Text>
+                    <strong>Name:</strong> {selectedDrinkBill.name}
+                  </Text>
+                  <Text>
+                    <strong>Table No.:</strong> {selectedDrinkBill.tableNo}
+                  </Text>
+                  <Text>
+                    <strong>Phone No. :</strong> {selectedDrinkBill.phoneNo}
+                  </Text>
+                  <Text>
+                    <strong>OTP:</strong> {selectedDrinkBill.otp}
+                  </Text>
+
+                  <Text>
+                    <strong>Drink Bill Paid:</strong>{" "}
+                    <Tag
+                      size="sm"
+                      colorScheme={
+                        selectedDrinkBill.drinkBillpaid === "notPaid"
+                          ? "red"
+                          : "green"
+                      }
+                    >
+                      {selectedDrinkBill.drinkBillpaid}
+                    </Tag>
+                  </Text>
+
+                  <Text>
+                    <strong>Drink Items:</strong>
+                  </Text>
+                  <ul>
+                    {selectedDrinkBill.DrinkItems.map((drink) => (
+                      <li key={drink._id}>
+                        {drink.name} ({drink.quantity})- ₹{drink.amount}
+                      </li>
+                    ))}
+                  </ul>
+                  <Text>
+                    <strong>Grand Total (Food and Drink included):</strong> ₹
+                    {selectedDrinkBill.grandTotal}
+                  </Text>
+
+                  <Text>
+                    <strong>Drink Total:</strong> ₹
+                    {selectedDrinkBill.drinkTotal}
+                  </Text>
+                  <Text>
+                    <strong>Donation Amount:</strong> ₹
+                    {selectedDrinkBill.donationAmount}
+                  </Text>
+                  <Text>
+                    <strong>Cleared Bill:</strong>{" "}
+                    {selectedDrinkBill.clear === "0"
+                      ? "Not Cleared"
+                      : selectedDrinkBill.clear === "1"
+                      ? "Cleared"
+                      : "Unknown"}
+                  </Text>
+                  <Text>
+                    <strong>CGST:</strong> {selectedDrinkBill.cgst}
+                  </Text>
+                  <Text>
+                    <strong>SGST:</strong> {selectedDrinkBill.sgst}
+                  </Text>
+                  <Text>
+                    <strong>Service Tax:</strong>{" "}
+                    {selectedDrinkBill.service_tax}
+                  </Text>
+                  <Text>
+                    <strong>Date:</strong> {selectedDrinkBill.date1}
+                  </Text>
+                  <Text>
+                    <strong>Time:</strong> {selectedDrinkBill.time1}
                   </Text>
                 </Box>
               </ModalBody>
